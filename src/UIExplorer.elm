@@ -308,74 +308,9 @@ app categories =
 {--VIEW --}
 
 
-sizes =
-    { commonMargin = 40
-    , headerHeight = 100
-    , headerMargin = 20
-    , stateNavigationMargin = 20
-    , stateButtonsMargin = 10
-    , sidebarWidth = 200
-    , storyContentPadding = 10
-    , storyContentWidth = 370
-    , categoryPaddingLeft = 40
-    , categoryPadding = 10
-    , categoryHeight = 40
-    , categoryLineHeight = 38
-    }
-
-
 toPx : Int -> String
 toPx prop =
     (prop |> toString) ++ "px"
-
-
-styles =
-    { logo = style [ ( "paddingLeft", sizes.commonMargin |> toPx ) ]
-    , sidebarItem = style [ ( "width", sizes.sidebarWidth |> toPx ) ]
-    , sidebarItemCategory =
-        style
-            [ ( "width", sizes.sidebarWidth |> toPx )
-            , ( "borderBottom", "1px solid #999" )
-            , ( "color", "#222" )
-            , ( "width", sizes.sidebarWidth |> toPx )
-            , ( "displayFlex", "" )
-            , ( "height", sizes.categoryHeight |> toPx )
-            , ( "lineHeight", sizes.categoryLineHeight |> toPx )
-            , ( "marginBottom", 0 |> toPx )
-            , ( "padding", sizes.categoryPadding |> toPx )
-            , ( "paddingLeft", sizes.categoryPaddingLeft |> toPx )
-            ]
-    , sidebarItemLink =
-        style
-            [ ( "paddingLeft", sizes.commonMargin + 10 |> toPx )
-            , ( "color", "#666" )
-            ]
-    , stateNavigation =
-        style
-            [ ( "margin", sizes.stateNavigationMargin |> toPx )
-            , ( "marginLeft", sizes.stateButtonsMargin |> toPx )
-            ]
-    , stateButton = style [ ( "marginRight", sizes.stateButtonsMargin |> toPx ) ]
-    , storyContent = style [ ( "paddingLeft", sizes.storyContentPadding |> toPx ) ]
-    , description =
-        style
-            [ ( "margin", sizes.storyContentPadding |> toPx )
-            , ( "paddingTop", sizes.storyContentPadding |> toPx )
-            , ( "marginTop", (sizes.storyContentPadding * 4) |> toPx )
-            , ( "borderTop", "1px solid #999" )
-            ]
-    , header =
-        style
-            [ ( "height", sizes.headerHeight |> toPx )
-            , ( "paddingTop", sizes.headerMargin |> toPx )
-            , ( "borderBottom", "1px solid #FFFFFF" )
-            ]
-    , welcome =
-        style
-            [ ( "margin", sizes.storyContentPadding |> toPx )
-            , ( "width", sizes.storyContentWidth |> toPx )
-            ]
-    }
 
 
 viewSidebar : Model -> Html Msg
@@ -386,10 +321,8 @@ viewSidebar model =
             , selectedUIId = model.selectedUIId
             }
     in
-        div [ class "column" ]
-            [ div
-                []
-                []
+        div [ class "br b--light-gray sans-serif measure mr4 bg-near-white near-black h-100" ]
+            [ div [ class "near-white bg-gray tc ttu tracked-mega f6 pa3" ] [ text "ELM UI-EXPLORER" ]
             , viewMenu model.categories viewConfig
             ]
 
@@ -397,11 +330,10 @@ viewSidebar model =
 viewHeader : Html Msg
 viewHeader =
     section
-        [ class "hero is-primary"
-        , styles.header
+        [ class "helvetica bg-light-green pv3"
         ]
         [ div [ onClick NavigateToHome ]
-            [ div [ styles.logo ]
+            [ div []
                 [ h1 [ class "title" ]
                     [ text "Elm" ]
                 , h2 [ class "subtitle" ]
@@ -423,16 +355,17 @@ viewMenuItem category selectedUIId (UIType ui) =
                     False
 
         linkClass =
-            if isSelected then
-                "is-active"
-            else
-                ""
+            "link black ph4 pv1 db hover-bg-light-gray bg-animate"
+                ++ (if isSelected then
+                        " b "
+                    else
+                        ""
+                   )
     in
-        li [ styles.sidebarItem ]
+        li []
             [ a
                 [ class linkClass
                 , href ("#" ++ category ++ "/" ++ ui.id)
-                , styles.sidebarItemLink
                 ]
                 [ text ui.id ]
             ]
@@ -441,17 +374,17 @@ viewMenuItem category selectedUIId (UIType ui) =
 viewMenuCategory : UIViewConfig -> UICategory -> Html Msg
 viewMenuCategory { selectedUIId, selectedStoryId } (UICategoryType ( title, categories )) =
     div []
-        [ a
-            [ class "menu-label", styles.sidebarItemCategory ]
-            [ text ("> " ++ title) ]
-        , ul [ class "menu-list" ]
+        [ div
+            [ class "pl3 pr3 pt3 pb2 b bb b--silver w-100" ]
+            [ text title ]
+        , ul [ class "menu-list list pa0" ]
             (List.map (viewMenuItem title selectedUIId) categories)
         ]
 
 
 viewMenu : List UICategory -> UIViewConfig -> Html Msg
 viewMenu categories config =
-    aside [ class "menu", style [ ( "marginTop", 0 |> toPx ) ] ]
+    aside [ class "" ]
         (List.map (viewMenuCategory config) categories)
 
 
@@ -485,14 +418,14 @@ viewContent model =
                 |> List.map (\(UIType s) -> s.viewStories viewConfig)
                 |> List.head
                 |> Maybe.withDefault
-                    (div [ styles.welcome ]
+                    (div []
                         [ span [ class "subtitle is-4 has-text-grey" ] [ text "We’re not designing pages, we’re designing systems of components." ]
                         , span [ class "subtitle is-5" ] [ text "—Stephen Hay" ]
                         ]
                     )
             , article []
                 (filteredUIs
-                    |> List.map (\(UIType s) -> div [ styles.description ] [ text s.description ])
+                    |> List.map (\(UIType s) -> div [] [ text s.description ])
                 )
             ]
 
@@ -500,10 +433,9 @@ viewContent model =
 view : Model -> Html Msg
 view model =
     div []
-        [ viewHeader
-        , div [ class "columns is-mobile" ]
+        [ div [ class "flex flex-row" ]
             [ viewSidebar model
-            , div [ class "column is-three-quarters" ]
+            , div [ class "" ]
                 [ viewContent model
                 ]
             ]
@@ -518,9 +450,13 @@ renderStory index { selectedStoryId } ( id, state ) =
                 |> Maybe.withDefault (index == 0)
 
         buttonClass =
-            classList [ ( "button", True ), ( "is-primary", isActive ) ]
+            classList
+                [ ( "bg-gray white", isActive )
+                , ( "bg-light-gray gray", not isActive )
+                , ( "link bg-animate pointer hover-white hover-bg-gray pa3 bg-gray sans-serif", True )
+                ]
     in
-        li [ styles.stateButton, onClick <| SelectStory id, buttonClass ] [ text id ]
+        li [ onClick <| SelectStory id, buttonClass ] [ text id ]
 
 
 {-| Renders Stories of a given UI.
@@ -540,7 +476,15 @@ renderStories storyView stories config =
             config
 
         menu =
-            ul [ styles.stateNavigation ] (List.indexedMap (\index -> renderStory index config) stories)
+            div [ class "mv3 pa3 br3 bg-light-gray sans-serif" ]
+                [ ul
+                    [ class "mt0 pl0 list flex flex-row"
+                    ]
+                    (List.indexedMap (\index -> renderStory index config) stories)
+                , div [ class "f7 black-40 tc" ]
+                    [ text "These are the different states of this UI piece."
+                    ]
+                ]
 
         currentStories =
             case selectedStoryId of
@@ -560,5 +504,5 @@ renderStories storyView stories config =
     in
         div []
             [ menu
-            , div [ styles.storyContent ] [ content ]
+            , div [] [ content ]
             ]
