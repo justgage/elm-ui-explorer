@@ -29,7 +29,7 @@ module UIExplorer exposing (app, renderStories, UI, UICategory, addUICategory, e
 -}
 
 import Html exposing (Html)
-import Html exposing (Html, aside, ul, li, a, span, text, div, section, h1, h2, node, article)
+import Html exposing (Html, aside, ul, li, a, span, text, div, section, h1, h2, h3, node, article)
 import Html.Attributes exposing (class, rel, href, classList, style)
 import Html.Events exposing (onClick)
 import Navigation
@@ -384,7 +384,7 @@ viewMenuCategory { selectedUIId, selectedStoryId } (UICategoryType ( title, cate
 
 viewMenu : List UICategory -> UIViewConfig -> Html Msg
 viewMenu categories config =
-    aside [ class "" ]
+    aside []
         (List.map (viewMenuCategory config) categories)
 
 
@@ -425,7 +425,15 @@ viewContent model =
                     )
             , article []
                 (filteredUIs
-                    |> List.map (\(UIType s) -> div [] [ text s.description ])
+                    |> List.map
+                        (\(UIType s) ->
+                            if s.description == "" then
+                                text ""
+                            else
+                                div
+                                    [ class "br3 pa3 bg-light-gray black-60 sans-serif" ]
+                                    [ h3 [ class "mt0" ] [ text "Description" ], text s.description ]
+                        )
                 )
             ]
 
@@ -435,7 +443,7 @@ view model =
     div []
         [ div [ class "flex flex-row" ]
             [ viewSidebar model
-            , div [ class "" ]
+            , div [ class "w-100 pr3" ]
                 [ viewContent model
                 ]
             ]
@@ -502,7 +510,7 @@ renderStories storyView stories config =
                 Nothing ->
                     text "Include somes states in your story..."
     in
-        div []
+        div [ class "w-100" ]
             [ menu
             , div [] [ content ]
             ]
