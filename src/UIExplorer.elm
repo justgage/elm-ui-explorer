@@ -321,7 +321,7 @@ viewSidebar model =
             , selectedUIId = model.selectedUIId
             }
     in
-        div [ class "br b--light-gray sans-serif measure mr4 bg-near-white near-black h-100" ]
+        div [ class "br b--light-gray sans-serif measure mr4 bg-near-white near-black vh-100 overflow-scroll" ]
             [ div [ class "near-white bg-gray tc ttu tracked-mega f6 pa3" ] [ text "ELM UI-EXPLORER" ]
             , viewMenu model.categories viewConfig
             ]
@@ -431,7 +431,7 @@ viewContent model =
                                 text ""
                             else
                                 div
-                                    [ class "br3 pa3 bg-light-gray black-60 sans-serif" ]
+                                    [ class "br3 pa3 bg-light-gray black-60 sans-serif mt3" ]
                                     [ h3 [ class "mt0" ] [ text "Description" ], text s.description ]
                         )
                 )
@@ -443,7 +443,7 @@ view model =
     div []
         [ div [ class "flex flex-row" ]
             [ viewSidebar model
-            , div [ class "w-100 pr3" ]
+            , div [ class "w-100 pr3 vh-100 overflow-scroll" ]
                 [ viewContent model
                 ]
             ]
