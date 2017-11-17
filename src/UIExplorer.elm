@@ -321,7 +321,7 @@ viewSidebar model =
             , selectedUIId = model.selectedUIId
             }
     in
-        div [ class "br b--light-gray sans-serif measure mr4 bg-near-white near-black vh-100 overflow-scroll" ]
+        div [ class "br b--light-gray sans-serif measure mr4 bg-near-white near-black vh-100 overflow-auto" ]
             [ div [ class "near-white bg-gray tc ttu tracked-mega f6 pa3" ] [ text "ELM UI-EXPLORER" ]
             , viewMenu model.categories viewConfig
             ]
@@ -418,9 +418,9 @@ viewContent model =
                 |> List.map (\(UIType s) -> s.viewStories viewConfig)
                 |> List.head
                 |> Maybe.withDefault
-                    (div []
-                        [ span [ class "subtitle is-4 has-text-grey" ] [ text "We’re not designing pages, we’re designing systems of components." ]
-                        , span [ class "subtitle is-5" ] [ text "—Stephen Hay" ]
+                    (div [ class "ma5 near-black sans-serif lh-title" ]
+                        [ span [ class "f-subheadline-ns sans-serif" ] [ text "We’re not designing pages, we’re designing systems of components." ]
+                        , span [ class "i f-subheadline-ns" ] [ text "—Stephen Hay" ]
                         ]
                     )
             , article []
@@ -443,7 +443,7 @@ view model =
     div []
         [ div [ class "flex flex-row" ]
             [ viewSidebar model
-            , div [ class "w-100 pr3 vh-100 overflow-scroll" ]
+            , div [ class "w-100 pr3 vh-100 overflow-auto" ]
                 [ viewContent model
                 ]
             ]
